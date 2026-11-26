@@ -29,6 +29,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.zhiwei.hub.BuildConfig
 import com.zhiwei.hub.core.Fmt
 import com.zhiwei.hub.core.launchIntentOf
 import com.zhiwei.hub.core.openAppInfo
@@ -147,7 +148,7 @@ fun HomeContent(
 
         Spacer(Modifier.height(10.dp))
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-            Text("知微系列 · v1.0.0", color = ZW.TextFaint, fontSize = 10.5.sp)
+            Text("知微系列 · v${BuildConfig.VERSION_NAME}", color = ZW.TextFaint, fontSize = 10.5.sp)
         }
     }
 }
@@ -294,7 +295,7 @@ fun DetailContent(
             SectionLabel("更新说明")
             GlassCard(corner = 18.dp, contentPadding = 15.dp) {
                 Text(
-                    view.remote!!.notes.take(1200),
+                    view.remote?.notes?.take(1200).orEmpty(),
                     color = ZW.TextDim, fontSize = 12.sp, lineHeight = 19.sp
                 )
             }

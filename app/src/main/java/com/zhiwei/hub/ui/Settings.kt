@@ -35,6 +35,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.zhiwei.hub.BuildConfig
 import com.zhiwei.hub.data.Prefs
 
 @Composable
@@ -288,7 +289,7 @@ fun AboutContent(accent: Color, onBack: () -> Unit) {
             CircleIcon(Glyph.BACK, accent, onBack)
         }
         Text("关于", color = ZW.Text, fontSize = 32.sp, fontWeight = FontWeight.Bold, letterSpacing = (-0.8).sp)
-        Text("知微中心 v1.0.0", color = ZW.TextDim, fontSize = 12.sp, modifier = Modifier.padding(top = 3.dp))
+        Text("知微中心 v${BuildConfig.VERSION_NAME}", color = ZW.TextDim, fontSize = 12.sp, modifier = Modifier.padding(top = 3.dp))
 
         Spacer(Modifier.height(18.dp))
         GlassCard(accent = accent, corner = 22.dp, contentPadding = 16.dp) {
