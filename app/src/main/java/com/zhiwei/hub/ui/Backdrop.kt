@@ -74,9 +74,7 @@ fun Backdrop(prefs: Prefs, modifier: Modifier = Modifier) {
                         .fillMaxSize()
                         .background(
                             Brush.linearGradient(
-                                colors = grad.map { Color(it) },
-                                start = androidx.compose.ui.geometry.Offset.Zero,
-                                end = androidx.compose.ui.geometry.Offset(Float.MAX_VALUE, Float.MAX_VALUE)
+                                colors = grad.map { Color(it) }
                             )
                         )
                 )
