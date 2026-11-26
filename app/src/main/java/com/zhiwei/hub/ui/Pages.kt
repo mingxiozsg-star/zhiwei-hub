@@ -129,7 +129,9 @@ fun HomeContent(
         Spacer(Modifier.height(12.dp))
         StatRow(state, accent)
 
-        if (!state.snapshot?.usageAccess!!) {
+        val snap = state.snapshot
+        val needUsageAccess = snap != null && !snap.usageAccess
+        if (needUsageAccess) {
             Spacer(Modifier.height(12.dp))
             UsageAccessCard(accent)
         }

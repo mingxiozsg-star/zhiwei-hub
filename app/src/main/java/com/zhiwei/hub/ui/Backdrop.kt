@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import com.zhiwei.hub.data.Prefs
 
 /** 读取用户选择的图片；失败返回 null（自动回退渐变）。 */
@@ -52,8 +53,8 @@ fun Backdrop(prefs: Prefs, modifier: Modifier = Modifier) {
     Box(modifier.fillMaxSize().background(ZW.Bg)) {
         when {
             mode == "image" && bitmap != null -> {
-                val m = if (blurRadius > 0.5f) {
-                    Modifier.fillMaxSize().blur(blurRadius.dp0())
+                val m = if (blurRadius > 0.5f && Build.VERSION.SDK_INT >= 31) {
+                    Modifier.fillMaxSize().blur(blurRadius.dp)
                 } else Modifier.fillMaxSize()
                 Image(
                     bitmap = bitmap,
@@ -97,4 +98,3 @@ fun Backdrop(prefs: Prefs, modifier: Modifier = Modifier) {
     }
 }
 
-private fun Float.dp0() = androidx.compose.ui.unit.Dp(this)
