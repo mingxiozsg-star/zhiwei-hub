@@ -15,10 +15,10 @@ import androidx.compose.ui.unit.sp
  * 深色不是主题选项，而是唯一主题 —— 让玻璃与光效有足够的对比空间。
  */
 object ZW {
-    val Bg = Color(0xFF07070B)
-    val Bg2 = Color(0xFF0E0E16)
-    val Card = Color(0xFF15151E)
-    val CardHi = Color(0xFF1D1D29)
+    val Bg = Color(0xFF0A1020)
+    val Bg2 = Color(0xFF101A30)
+    val Card = Color(0xFF151A2E)
+    val CardHi = Color(0xFF1D2440)
     val Line = Color(0x22FFFFFF)
     val LineSoft = Color(0x0DFFFFFF)
     val Text = Color(0xFFF3F3F8)
@@ -38,7 +38,8 @@ object ZW {
 enum class Accent(val label: String, val color: Color, val second: Color) {
     SAKURA("樱粉", Color(0xFFFF6FA5), Color(0xFFA97BFF)),
     AURORA("极光", Color(0xFF56D9C8), Color(0xFF6FA8FF)),
-    EMBER("琥珀", Color(0xFFFFC24B), Color(0xFFFF6F6F));
+    EMBER("琥珀", Color(0xFFFFC24B), Color(0xFFFF6F6F)),
+    OCEAN("海蓝", Color(0xFF3B82F6), Color(0xFF06B6D4));
 
     companion object {
         fun of(name: String?): Accent = entries.firstOrNull { it.name == name } ?: SAKURA

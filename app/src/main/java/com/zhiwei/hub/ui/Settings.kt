@@ -45,6 +45,7 @@ fun SettingsContent(
     onBack: (() -> Unit)?,
     onAppearance: () -> Unit,
     onAbout: () -> Unit,
+    onDevice: () -> Unit,
     onRefresh: () -> Unit
 ) {
     val scroll = rememberScrollState()
@@ -128,6 +129,7 @@ fun SettingsContent(
         Spacer(Modifier.height(14.dp))
         SectionLabel("其他")
         GlassCard(corner = 20.dp, contentPadding = 4.dp) {
+            NavRow("设备信息", "内存、存储、处理器与进程", Glyph.INFO, accent, onDevice)
             NavRow("关于知微中心", "版本、致谢与说明", Glyph.INFO, accent, onAbout)
         }
 

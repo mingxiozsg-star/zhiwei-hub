@@ -30,6 +30,7 @@ import com.zhiwei.hub.ui.AppearanceContent
 import com.zhiwei.hub.ui.Backdrop
 import com.zhiwei.hub.ui.BarTab
 import com.zhiwei.hub.ui.DetailContent
+import com.zhiwei.hub.ui.DeviceContent
 import com.zhiwei.hub.ui.GlassBar
 import com.zhiwei.hub.ui.Glyph
 import com.zhiwei.hub.ui.HubState
@@ -71,40 +72,43 @@ fun AppRoot() {
     Box(Modifier.fillMaxSize()) {
         Backdrop(prefs)
 
-        HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize()) { page ->
-            when (page) {
-                0 -> {
-                    val scroll = rememberScrollState()
-                    HomeContent(
+        // 父页（三个平级 tab）只在无二级页时渲染，二级页打开时整层移除，
+        // 让二级页的透明玻璃直接透出壁纸，而不是父页内容（杜绝穿模）
+        if (subRoute == null) {
+            HorizontalPager(state = pagerState, modifier = Modifier.fillMaxSize()) { page ->
+                when (page) {
+                    0 -> {
+                        val scroll = rememberScrollState()
+                        HomeContent(
+                            state = hub,
+                            accent = accent,
+                            scroll = scroll,
+                            onOpenInstall = { scope.launch { pagerState.animateScrollToPage(1) } },
+                            onOpenApp = { subRoute = Route.Detail(it) },
+                            onRefresh = { hub.refresh() },
+                            onSettings = { scope.launch { pagerState.animateScrollToPage(2) } }
+                        )
+                    }
+                    1 -> InstallCenterContent(
                         state = hub,
                         accent = accent,
-                        scroll = scroll,
-                        onOpenInstall = { scope.launch { pagerState.animateScrollToPage(1) } },
-                        onOpenApp = { subRoute = Route.Detail(it) },
-                        onRefresh = { hub.refresh() },
-                        onSettings = { scope.launch { pagerState.animateScrollToPage(2) } }
+                        dl = installer,
+                        onBack = null,
+                        onOpenApp = { subRoute = Route.Detail(it) }
+                    )
+                    2 -> SettingsContent(
+                        prefs = prefs,
+                        accent = accent,
+                        onBack = null,
+                        onAppearance = { subRoute = Route.Appearance },
+                        onAbout = { subRoute = Route.About },
+                        onDevice = { subRoute = Route.Device },
+                        onRefresh = { hub.refresh() }
                     )
                 }
-                1 -> InstallCenterContent(
-                    state = hub,
-                    accent = accent,
-                    dl = installer,
-                    onBack = null,
-                    onOpenApp = { subRoute = Route.Detail(it) }
-                )
-                2 -> SettingsContent(
-                    prefs = prefs,
-                    accent = accent,
-                    onBack = null,
-                    onAppearance = { subRoute = Route.Appearance },
-                    onAbout = { subRoute = Route.About },
-                    onRefresh = { hub.refresh() }
-                )
             }
-        }
 
-        // 底栏：与 pager 联动，点击切换平级 tab；子页打开时隐藏
-        if (subRoute == null) {
+            // 底栏：与 pager 联动，点击切换平级 tab
             Box(
                 Modifier
                     .fillMaxWidth()
@@ -148,6 +152,7 @@ fun AppRoot() {
                         onBack = { subRoute = null }
                     )
                     is Route.About -> AboutContent(accent = accent, onBack = { subRoute = null })
+                    is Route.Device -> DeviceContent(accent = accent, onBack = { subRoute = null })
                 }
             }
         }

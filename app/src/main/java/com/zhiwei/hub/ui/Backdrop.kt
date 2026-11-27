@@ -62,11 +62,11 @@ fun Backdrop(prefs: Prefs, modifier: Modifier = Modifier) {
                     contentScale = ContentScale.Crop,
                     modifier = m
                 )
-                Box(Modifier.fillMaxSize().background(Color.Black.copy(alpha = dim)))
+                Box(Modifier.fillMaxSize().background(ZW.Bg.copy(alpha = dim)))
             }
             mode == "solid" -> {
                 Box(Modifier.fillMaxSize().background(Color(grad[0])))
-                Box(Modifier.fillMaxSize().background(Color.Black.copy(alpha = dim * 0.5f)))
+                Box(Modifier.fillMaxSize().background(ZW.Bg.copy(alpha = dim * 0.5f)))
             }
             else -> {
                 Box(
@@ -78,7 +78,7 @@ fun Backdrop(prefs: Prefs, modifier: Modifier = Modifier) {
                             )
                         )
                 )
-                Box(Modifier.fillMaxSize().background(Color.Black.copy(alpha = dim)))
+                Box(Modifier.fillMaxSize().background(ZW.Bg.copy(alpha = dim)))
                 // 顶部霓虹光斑
                 Box(
                     Modifier
