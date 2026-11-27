@@ -53,9 +53,6 @@ fun DeviceContent(accent: Color, onBack: () -> Unit) {
         ) {
             CircleIcon(Glyph.BACK, accent, onBack)
             Spacer(Modifier.weight(1f))
-            if (refreshing) {
-                Text("读取中…", color = ZW.TextDim, fontSize = 12.sp)
-            }
         }
         Text("设备信息", color = ZW.Text, fontSize = 32.sp, fontWeight = FontWeight.Bold, letterSpacing = (-0.8).sp)
         Text("内存 · 存储 · 处理器 · 进程", color = ZW.TextDim, fontSize = 12.sp, modifier = Modifier.padding(top = 3.dp))
