@@ -86,7 +86,7 @@ fun AppRoot() {
                             onOpenInstall = { scope.launch { pagerState.animateScrollToPage(1) } },
                             onOpenApp = { subRoute = Route.Detail(it) },
                             onRefresh = { hub.refresh() },
-                            onSettings = { scope.launch { pagerState.animateScrollToPage(3) } }
+                            onSettings = { scope.launch { pagerState.animateScrollToPage(2) } }
                         )
                     }
                     1 -> InstallCenterContent(
@@ -102,7 +102,7 @@ fun AppRoot() {
                         onBack = null,
                         onAppearance = { subRoute = Route.Appearance },
                         onAbout = { subRoute = Route.About },
-                        onDevice = { scope.launch { pagerState.animateScrollToPage(2) } },
+                        onDevice = { scope.launch { pagerState.animateScrollToPage(3) } },
                         onRefresh = { hub.refresh() }
                     )
                 3 -> DeviceContent(accent = accent, onBack = null)
@@ -122,8 +122,8 @@ fun AppRoot() {
                     tabs = listOf(
                         BarTab("总览", Glyph.CHECK),
                         BarTab("安装", Glyph.DOWNLOAD),
-                        BarTab("设备", Glyph.INFO),
-                        BarTab("设置", Glyph.SETTINGS)
+                        BarTab("设置", Glyph.SETTINGS),
+                        BarTab("设备", Glyph.INFO)
                     ),
                     selected = pagerState.currentPage,
                     accent = accent,
