@@ -59,6 +59,18 @@ fun GlassBar(
                         listOf(Color.White.copy(alpha = 0.13f), Color.White.copy(alpha = 0.05f))
                     )
                 )
+                .background(
+                    Brush.linearGradient(
+                        colors = listOf(
+                            Color.White.copy(alpha = 0.20f),
+                            Color.White.copy(alpha = 0.02f),
+                            Color.Transparent
+                        ),
+                        start = androidx.compose.ui.geometry.Offset.Zero,
+                        end = androidx.compose.ui.geometry.Offset.Infinite,
+                        tileMode = androidx.compose.ui.graphics.TileMode.Decal
+                    )
+                )
                 .border(
                     1.dp,
                     Brush.verticalGradient(

@@ -19,13 +19,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 /**
- * 玻璃卡片：竖向渐变底 + 1px 描边 + 顶部边缘光（RimLight）。
+ * 液态玻璃卡片：半透明基底透出壁纸 + 斜向镜面高光 + 上亮下暗边缘反光。
  * 按压时轻微内缩，松手弹性归位 —— 全部走 animateFloatAsState 的可打断语义。
  */
 @Composable
@@ -50,8 +51,33 @@ fun GlassCard(
             .fillMaxWidth()
             .scale(s)
             .clip(shape)
-            .background(Brush.verticalGradient(listOf(Color(0xFF1C1C27), Color(0xFF12121A))))
-            .border(1.dp, Brush.verticalGradient(listOf(Color(0x2EFFFFFF), Color(0x0AFFFFFF))), shape)
+            // 液态玻璃基底：半透明白色渐变，透出壁纸，而非不透明深色盖死
+            .background(
+                Brush.verticalGradient(
+                    listOf(Color.White.copy(alpha = 0.12f), Color.White.copy(alpha = 0.05f))
+                )
+            )
+            // 顶部斜向镜面高光（specular highlight）
+            .background(
+                Brush.linearGradient(
+                    colors = listOf(
+                        Color.White.copy(alpha = 0.22f),
+                        Color.White.copy(alpha = 0.02f),
+                        Color.Transparent
+                    ),
+                    start = Offset.Zero,
+                    end = Offset.Infinite,
+                    tileMode = androidx.compose.ui.graphics.TileMode.Decal
+                )
+            )
+            // 边缘反光：上亮下暗，模拟玻璃边缘折射
+            .border(
+                1.dp,
+                Brush.verticalGradient(
+                    listOf(Color.White.copy(alpha = 0.30f), Color.White.copy(alpha = 0.05f))
+                ),
+                shape
+            )
             .then(
                 if (onClick != null) Modifier.clickable(
                     interactionSource = inter,

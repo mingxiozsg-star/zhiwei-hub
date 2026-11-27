@@ -23,7 +23,7 @@ class Prefs(ctx: Context) {
 
     /** 0f..0.9f 背景暗化 */
     var bgDim: Float
-        get() = sp.getFloat("bg_dim", 0.28f)
+        get() = sp.getFloat("bg_dim", 0.12f)
         set(v) = sp.edit().putFloat("bg_dim", v).apply()
 
     /** 0f..25f 背景模糊 */
