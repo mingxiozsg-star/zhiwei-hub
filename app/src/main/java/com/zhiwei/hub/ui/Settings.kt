@@ -42,7 +42,7 @@ import com.zhiwei.hub.data.Prefs
 fun SettingsContent(
     prefs: Prefs,
     accent: Color,
-    onBack: () -> Unit,
+    onBack: (() -> Unit)?,
     onAppearance: () -> Unit,
     onAbout: () -> Unit,
     onRefresh: () -> Unit
@@ -59,8 +59,10 @@ fun SettingsContent(
             .padding(start = 16.dp, end = 16.dp, bottom = 118.dp)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 8.dp, bottom = 12.dp)) {
-            CircleIcon(Glyph.BACK, accent, onBack)
-            Spacer(Modifier.weight(1f))
+            if (onBack != null) {
+                CircleIcon(Glyph.BACK, accent, onBack)
+                Spacer(Modifier.weight(1f))
+            }
         }
         Text("设置", color = ZW.Text, fontSize = 32.sp, fontWeight = FontWeight.Bold, letterSpacing = (-0.8).sp)
         Text("外观、扫描、关于", color = ZW.TextDim, fontSize = 12.sp, modifier = Modifier.padding(top = 3.dp))
@@ -316,7 +318,7 @@ fun AboutContent(accent: Color, onBack: () -> Unit) {
         Spacer(Modifier.height(14.dp))
         SectionLabel("联系")
         GlassCard(corner = 18.dp, contentPadding = 15.dp) {
-            Text("官网 qzxui.geometryos.cn", color = ZW.TextDim, fontSize = 12.sp)
+            Text("官网 建设中", color = ZW.TextDim, fontSize = 12.sp)
             Text("邮箱 ailixiya@qycxkjit.wecom.work", color = ZW.TextDim, fontSize = 12.sp,
                 modifier = Modifier.padding(top = 4.dp))
             Text("QQ 群 1137595303", color = ZW.TextDim, fontSize = 12.sp,

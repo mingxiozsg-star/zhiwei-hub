@@ -97,7 +97,6 @@ fun CircleIcon(g: Glyph, accent: Color, onClick: () -> Unit) {
 fun HomeContent(
     state: HubState,
     accent: Color,
-    nav: NavController,
     scroll: androidx.compose.foundation.ScrollState,
     onOpenInstall: () -> Unit,
     onOpenApp: (String) -> Unit,

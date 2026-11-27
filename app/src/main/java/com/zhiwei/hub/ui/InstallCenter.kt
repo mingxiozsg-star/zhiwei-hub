@@ -81,7 +81,7 @@ fun InstallCenterContent(
     state: HubState,
     accent: Color,
     dl: InstallController,
-    onBack: () -> Unit,
+    onBack: (() -> Unit)?,
     onOpenApp: (String) -> Unit
 ) {
     val ctx = LocalContext.current
@@ -94,8 +94,10 @@ fun InstallCenterContent(
             .padding(start = 16.dp, end = 16.dp, bottom = 118.dp)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 8.dp, bottom = 12.dp)) {
-            CircleIcon(Glyph.BACK, accent, onBack)
-            Spacer(Modifier.weight(1f))
+            if (onBack != null) {
+                CircleIcon(Glyph.BACK, accent, onBack)
+                Spacer(Modifier.weight(1f))
+            }
             GhostButton("全部检查", accent = accent, glyph = Glyph.REFRESH) { state.checkUpdates() }
         }
 
