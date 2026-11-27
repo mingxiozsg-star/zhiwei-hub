@@ -40,19 +40,35 @@ object ApkDownloader {
         release: ReleaseInfo,
         sink: ProgressSink? = null
     ): File? {
-        val url = release.apkUrl ?: return null
+        val baseUrl = release.apkUrl ?: return null
         val out = targetFile(ctx, app, release)
+        // 已完成且大小吻合，直接复用
         if (out.exists() && release.apkSize > 0 && out.length() == release.apkSize) return out
 
+        // 逐个候选 URL 尝试，直到成功下载完
+        for (cand in NetAccel.candidates(baseUrl)) {
+            val f = downloadOnce(ctx, app, release, cand, sink)
+            if (f != null) return f
+        }
+        return null
+    }
+
+    private fun downloadOnce(
+        ctx: Context,
+        app: SeriesApp,
+        release: ReleaseInfo,
+        url: String,
+        sink: ProgressSink? = null
+    ): File? {
+        val out = targetFile(ctx, app, release)
         val part = File(out.absolutePath + ".part")
-        if (part.exists()) part.delete()
 
         var conn: HttpURLConnection? = null
         return try {
             conn = (URL(url).openConnection() as HttpURLConnection).apply {
                 instanceFollowRedirects = true
-                connectTimeout = 15000
-                readTimeout = 30000
+                connectTimeout = 12000
+                readTimeout = 20000
                 setRequestProperty("User-Agent", "ZhiweiHub/1.0 (Android)")
                 setRequestProperty("Accept", "application/octet-stream")
             }
@@ -78,6 +94,11 @@ object ApkDownloader {
                     }
                     output.flush()
                 }
+            }
+            // 校验大小：若声明了大小，不完整则丢弃，让下一个候选源重试
+            if (release.apkSize > 0 && part.length() != release.apkSize) {
+                runCatching { part.delete() }
+                return null
             }
             if (out.exists()) out.delete()
             if (part.renameTo(out)) out else null

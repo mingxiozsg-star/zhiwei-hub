@@ -61,8 +61,8 @@ fun AppRoot() {
 
     val accent = prefs.accent.color
 
-    // 三个平级 tab：总览 / 安装中心 / 设置
-    val pagerState = rememberPagerState(pageCount = { 3 })
+    // 四个平级 tab：总览 / 安装中心 / 设备 / 设置
+    val pagerState = rememberPagerState(pageCount = { 4 })
     var subRoute by remember { mutableStateOf<Route?>(null) }
 
     LaunchedEffect(Unit) { hub.start() }
@@ -86,7 +86,7 @@ fun AppRoot() {
                             onOpenInstall = { scope.launch { pagerState.animateScrollToPage(1) } },
                             onOpenApp = { subRoute = Route.Detail(it) },
                             onRefresh = { hub.refresh() },
-                            onSettings = { scope.launch { pagerState.animateScrollToPage(2) } }
+                            onSettings = { scope.launch { pagerState.animateScrollToPage(3) } }
                         )
                     }
                     1 -> InstallCenterContent(
@@ -102,9 +102,10 @@ fun AppRoot() {
                         onBack = null,
                         onAppearance = { subRoute = Route.Appearance },
                         onAbout = { subRoute = Route.About },
-                        onDevice = { subRoute = Route.Device },
+                        onDevice = { scope.launch { pagerState.animateScrollToPage(2) } },
                         onRefresh = { hub.refresh() }
                     )
+                3 -> DeviceContent(accent = accent, onBack = null)
                 }
             }
 
@@ -120,7 +121,8 @@ fun AppRoot() {
                 GlassBar(
                     tabs = listOf(
                         BarTab("总览", Glyph.CHECK),
-                        BarTab("安装中心", Glyph.DOWNLOAD),
+                        BarTab("安装", Glyph.DOWNLOAD),
+                        BarTab("设备", Glyph.INFO),
                         BarTab("设置", Glyph.SETTINGS)
                     ),
                     selected = pagerState.currentPage,

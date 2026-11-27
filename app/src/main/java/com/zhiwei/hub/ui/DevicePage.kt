@@ -32,7 +32,7 @@ import com.zhiwei.hub.core.DeviceInfoProbe
 import com.zhiwei.hub.core.Fmt
 
 @Composable
-fun DeviceContent(accent: Color, onBack: () -> Unit) {
+fun DeviceContent(accent: Color, onBack: (() -> Unit)?) {
     val ctx = LocalContext.current
     val scroll = rememberScrollState()
     var info by remember { mutableStateOf<DeviceInfo?>(null) }
@@ -45,14 +45,16 @@ fun DeviceContent(accent: Color, onBack: () -> Unit) {
         Modifier
             .fillMaxSize()
             .verticalScroll(scroll)
-            .padding(start = 16.dp, end = 16.dp, bottom = 40.dp)
+            .padding(start = 16.dp, end = 16.dp, bottom = 118.dp)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(top = 8.dp, bottom = 12.dp)
         ) {
-            CircleIcon(Glyph.BACK, accent, onBack)
-            Spacer(Modifier.weight(1f))
+            if (onBack != null) {
+                CircleIcon(Glyph.BACK, accent, onBack)
+                Spacer(Modifier.weight(1f))
+            }
         }
         Text("设备信息", color = ZW.Text, fontSize = 32.sp, fontWeight = FontWeight.Bold, letterSpacing = (-0.8).sp)
         Text("内存 · 存储 · 处理器 · 进程", color = ZW.TextDim, fontSize = 12.sp, modifier = Modifier.padding(top = 3.dp))

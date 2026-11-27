@@ -29,11 +29,22 @@ object ReleaseApi {
     private const val BASE = "https://api.github.com/repos/mingxiozsg-star"
     private const val UA = "ZhiweiHub/1.0 (Android)"
 
-    fun latest(repo: String): ReleaseInfo? = runCatching {
-        val conn = (URL("$BASE/$repo/releases/latest").openConnection() as HttpURLConnection).apply {
+    fun latest(repo: String): ReleaseInfo? {
+        val url = "$BASE/$repo/releases/latest"
+        // 逐个候选 URL 尝试，直到成功
+        for (cand in NetAccel.candidates(url)) {
+            val r = fetchLatest(cand)
+            if (r != null) return r
+        }
+        return null
+    }
+
+    private fun fetchLatest(url: String): ReleaseInfo? = runCatching {
+        val conn = (URL(url).openConnection() as HttpURLConnection).apply {
             requestMethod = "GET"
-            connectTimeout = 9000
-            readTimeout = 12000
+            connectTimeout = 6000
+            readTimeout = 8000
+            instanceFollowRedirects = true
             setRequestProperty("User-Agent", UA)
             setRequestProperty("Accept", "application/vnd.github+json")
         }
@@ -48,7 +59,6 @@ object ReleaseApi {
         var apkSize = 0L
         var apkName: String? = null
         if (assets != null) {
-            // 优先取 release 包，其次任意 apk，避免抓到 debug 包
             val list = (0 until assets.length()).map { assets.getJSONObject(it) }
             val chosen = list.firstOrNull {
                 it.optString("name").contains("release", true) && it.optString("name").endsWith(".apk", true)
@@ -61,7 +71,7 @@ object ReleaseApi {
         }
 
         ReleaseInfo(
-            repo = repo,
+            repo = json.optString("full_name").substringAfterLast('/').ifBlank { "-" },
             tag = json.optString("tag_name").ifBlank { "-" },
             name = json.optString("name").ifBlank { json.optString("tag_name") },
             notes = json.optString("body").orEmpty(),
